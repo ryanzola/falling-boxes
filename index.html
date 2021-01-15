@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>Parcel Sandbox</title>
+	<meta charset="UTF-8" />
+	<link href="./src/styles.css" rel="stylesheet"></link>
+</head>
+
+<body>
+	<div id="container"></div>
+
+	<script id="vertex" type="x-shader/x-vertex">
+		varying vec2 vUv;
+		void main() {
+			vUv = uv;
+			gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+		}
+		</script>
+		
+		<script id="fragment" type="x-shader/x-fragment">
+		varying vec2 vUv;
+		
+		void main() {
+			float width = 0.01;
+			float prec = 0.001;
+			
+			float borderx = max(
+				smoothstep(width + prec, width - prec, vUv.x),
+				smoothstep(width + prec, width - prec, 1.0 - vUv.x)
+			);
+			
+			float bordery = max(
+				smoothstep(width + prec, width - prec, vUv.y),
+				smoothstep(width + prec, width - prec, 1.0 - vUv.y)
+			);
+			
+			float border = max(borderx, bordery);
+			
+			gl_FragColor = vec4(0.0, border - 0.3, border, 1.0);
+		}
+		</script>
+
+	<script src="src/index.js">
+	</script>
+</body>
+
+</html>
